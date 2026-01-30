@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MediatR;
 using LearningSession.Application.DTOs;
 using LearningSession.Domain.Entities;
+using LearningSession.Application.Repositories;
 
 namespace LearningSession.Application.Commands.StartLearningSession
 {
@@ -20,7 +21,7 @@ namespace LearningSession.Application.Commands.StartLearningSession
 
         public async Task<LearningSessionDto> Handle(StartLearningSessionCommand request, CancellationToken cancellationToken)
         {
-            var session = LearningSession.StartNew(request.Id, request.StartedAt, request.ActivityIds);
+            var session = LearningSessionEntity.StartNew(request.Id, request.StartedAt, request.ActivityIds);
 
             // persist session via repository
             await _repository.AddAsync(session);

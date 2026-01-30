@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using MediatR;
 using LearningSession.Application.DTOs;
 using LearningSession.Domain.Entities;
+using LearningSession.Application.Repositories;
 
 namespace LearningSession.Application.Commands.AddActivityToSession
 {
