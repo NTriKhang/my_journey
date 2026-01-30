@@ -141,6 +141,7 @@ Design services with **clear bounded contexts**, while allowing:
 - Single deployment initially
 - Independent data ownership per service
 - Future extraction without major refactoring
+- This decision is exploratory and may be revised once real operational pain is observed.
 
 ### Consequences
 **Positive**
@@ -156,7 +157,7 @@ Design services with **clear bounded contexts**, while allowing:
 
 ## ADR-006: Incremental Adoption of Event-Driven Architecture
 
-**Status**: Proposed  
+**Status**: Deferred  
 **Date**: 2026-01-22
 
 ### Context
@@ -178,6 +179,8 @@ Current Phase 1 flows are simple and synchronous.
 - Some synchronous coupling remains
 - Mixed communication styles later
 
+### NOTE
+- This ADR exists to record an idea, not a commitment.
 ---
 
 ## ADR-007: Defer Automatic Activity Tracking
