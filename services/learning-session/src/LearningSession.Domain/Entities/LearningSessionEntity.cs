@@ -51,7 +51,7 @@ namespace LearningSession.Domain.Entities
         /// </summary>
         public void End(DateTimeOffset endedAt)
         {
-            if (EndedAt != null) 17throw new InvalidOperationException("Session has already been ended.");
+            if (EndedAt != null) throw new InvalidOperationException("Session has already been ended.");
             if (endedAt < StartedAt) throw new ArgumentException("EndedAt cannot be before StartedAt", nameof(endedAt));
 
             EndedAt = endedAt;

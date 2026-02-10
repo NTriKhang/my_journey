@@ -8,6 +8,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+// Configure CORS to allow requests from any origin (adjust for production)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 // Add Swagger/OpenAPI services
 // Generates OpenAPI document and enables Swagger UI in development
 builder.Services.AddEndpointsApiExplorer();
@@ -49,6 +60,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Enable CORS using configured policy
+app.UseCors("AllowAll");
 
 app.UseAuthorization();
 
