@@ -2,70 +2,58 @@ using System.Reflection;
 using MediatR;
 using AutoMapper;
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-builder.Services.AddControllers();
-
-// Configure CORS to allow requests from any origin (adjust for production)
-builder.Services.AddCors(options =>
+internal class Program
 {
-    options.AddPolicy("AllowAll", policy =>
+    private static void Main(string[] args)
     {
-        policy.AllowAnyOrigin()
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
-});
+        var builder = WebApplication.CreateBuilder(args);
 
-// Add Swagger/OpenAPI services
-// Generates OpenAPI document and enables Swagger UI in development
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
-// Register MediatR by scanning the Application assembly (marker type)
-builder.Services.AddMediatR(cfg =>
-{
-    cfg.RegisterServicesFromAssemblies(
-        [LearningSession.Application.ApplicationAssembly.Assembly]
-    );
-});
+        builder.Services.AddControllers();
 
-// Register AutoMapper and scan profiles from the Application assembly
-// Use the assembly containing the marker type so AutoMapper picks up profiles
-builder.Services.AddAutoMapper(cfg =>
-{
-    cfg.AddProfile(typeof(LearningSession.Application.Mappings.LearningSessionProfile));
-});
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAll", policy =>
+            {
+                policy.AllowAnyOrigin()
+                      .AllowAnyHeader()
+                      .AllowAnyMethod();
+            });
+        });
 
-// Allow Infrastructure to register its services (DbContext, repositories)
-LearningSession.Infrastructure.ServiceCollectionExtensions.AddInfrastructure(builder.Services, builder.Configuration);
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
 
-// (Optional) Existing convenience extension for OpenAPI if present in project
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+        builder.Services.AddMediatR(cfg =>
+        {
+            cfg.RegisterServicesFromAssemblies(
+                [LearningSession.Application.ApplicationAssembly.Assembly]
+            );
+        });
 
-var app = builder.Build();
+        builder.Services.AddAutoMapper((sp, cfg) => { }, LearningSession.Application.ApplicationAssembly.Assembly);
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    // Enable generated Swagger document and UI when running in Development
-    app.UseSwagger();
-    app.UseSwaggerUI();
+        LearningSession.Infrastructure.ServiceCollectionExtensions.AddInfrastructure(builder.Services, builder.Configuration);
 
-    // If the project also uses a custom OpenAPI helper, keep mapping it.
-    app.MapOpenApi();
+        builder.Services.AddOpenApi();
+
+        var app = builder.Build();
+
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+            app.MapOpenApi();
+        }
+
+        app.UseHttpsRedirection();
+
+        app.UseCors("AllowAll");
+
+        app.UseAuthorization();
+
+        app.MapControllers();
+
+        app.Run();
+    }
 }
-
-app.UseHttpsRedirection();
-
-// Enable CORS using configured policy
-app.UseCors("AllowAll");
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
