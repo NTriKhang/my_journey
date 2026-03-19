@@ -13,7 +13,7 @@ namespace LearningSession.Infrastructure.Persistence
         {
         }
 
-        public DbSet<LearningSessionEntity> LearningSessions { get; set; } = null!;
+        public DbSet<LearningSession> LearningSessions { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,7 @@ namespace LearningSession.Infrastructure.Persistence
 
             modelBuilder.HasDefaultSchema("Learning");
 
-            modelBuilder.Entity<LearningSessionEntity>(b =>
+            modelBuilder.Entity<LearningSession>(b =>
             {
                 b.ToTable("LearningSessions");
                 b.HasKey(e => e.Id);

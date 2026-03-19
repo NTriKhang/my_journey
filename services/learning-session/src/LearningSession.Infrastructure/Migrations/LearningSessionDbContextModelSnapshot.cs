@@ -23,7 +23,7 @@ namespace LearningSession.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("LearningSession.Domain.Entities.LearningSessionEntity", b =>
+            modelBuilder.Entity("LearningSession.Domain.Entities.LearningSession", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()

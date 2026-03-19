@@ -18,7 +18,7 @@ namespace LearningSession.Infrastructure.Repositories
             _db = db;
         }
 
-        public async Task AddAsync(LearningSessionEntity session)
+        public async Task AddAsync(LearningSession session)
         {
             _db.LearningSessions.Add(session);
             await _db.SaveChangesAsync();
@@ -32,17 +32,17 @@ namespace LearningSession.Infrastructure.Repositories
             await _db.SaveChangesAsync();
         }
 
-        public async Task<LearningSessionEntity?> GetByIdAsync(Guid id)
+        public async Task<LearningSession?> GetByIdAsync(Guid id)
         {
             return await _db.LearningSessions.FindAsync(id);
         }
 
-        public async Task<IEnumerable<LearningSessionEntity>> ListAsync()
+        public async Task<IEnumerable<LearningSession>> ListAsync()
         {
             return await _db.LearningSessions.AsNoTracking().ToListAsync();
         }
 
-        public async Task UpdateAsync(LearningSessionEntity session)
+        public async Task UpdateAsync(LearningSession session)
         {
             _db.LearningSessions.Update(session);
             await _db.SaveChangesAsync();

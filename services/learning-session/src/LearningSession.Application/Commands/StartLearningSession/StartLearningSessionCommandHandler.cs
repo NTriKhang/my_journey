@@ -21,7 +21,7 @@ namespace LearningSession.Application.Commands.StartLearningSession
 
         public async Task<LearningSessionDto> Handle(StartLearningSessionCommand request, CancellationToken cancellationToken)
         {
-            var session = LearningSessionEntity.StartNew(request.Id, request.StartedAt, request.ActivityIds);
+            var session = LearningSession.StartNew(request.Id, request.StartedAt, request.ActivityIds);
 
             // persist session via repository
             await _repository.AddAsync(session);

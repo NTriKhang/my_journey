@@ -7,7 +7,7 @@ using LearningSession.Domain.ValueObjects;
 namespace LearningSession.Application.DTOs
 {
     /// <summary>
-    /// Data Transfer Object for LearningSessionEntity entity.
+    /// Data Transfer Object for LearningSession entity.
     /// </summary>
     public sealed class LearningSessionDto
     {

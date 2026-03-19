@@ -8,7 +8,7 @@ namespace LearningSession.Application.Mappings
     {
         public LearningSessionProfile()
         {
-            CreateMap<LearningSessionEntity, LearningSessionDto>()
+            CreateMap<LearningSession, LearningSessionDto>()
                 .ForMember(dest => dest.LearningActivityIds, opt => opt.MapFrom(src => src.LearningActivityIds));
         }
     }
