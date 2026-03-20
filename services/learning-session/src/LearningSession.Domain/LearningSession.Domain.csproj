@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="14.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="Common.Domain">
       <HintPath>..\..\..\shared\src\Common.Application\bin\Debug\net9.0\Common.Domain.dll</HintPath>
     </Reference>

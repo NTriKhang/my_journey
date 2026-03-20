@@ -1,9 +1,6 @@
-using System;
-using MediatR;
-using LearningSession.Application.DTOs;
+using Common.Application.Messaging;
 
 namespace LearningSession.Application.Commands.RemoveActivityFromSession
 {
-    public record RemoveActivityFromSessionCommand(Guid SessionId, Guid ActivityId) : IRequest<LearningSessionDto>;
+    public record RemoveActivityFromSessionCommand(Guid SessionId, Guid ActivityId) : ICommand;
 }
-

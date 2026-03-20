@@ -1,33 +1,30 @@
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
-using LearningSession.Application.DTOs;
-using LearningSession.Domain.Entities;
+using Common.Application.Messaging;
+using Common.Domain;
 using LearningSession.Application.Repositories;
+using LearningSession.Domain.LSessions;
+using LearningSession.Application.Abstractions.Data;
 
 namespace LearningSession.Application.Commands.RemoveActivityFromSession
 {
-    public class RemoveActivityFromSessionCommandHandler : IRequestHandler<RemoveActivityFromSessionCommand, LearningSessionDto>
+    public class RemoveActivityFromSessionCommandHandler(
+        ILearningSessionRepository repository,
+        IUnitOfWork unitOfWork)
+        : ICommandHandler<RemoveActivityFromSessionCommand>
     {
-        private readonly AutoMapper.IMapper _mapper;
-        private readonly ILearningSessionRepository _repository;
-
-        public RemoveActivityFromSessionCommandHandler(AutoMapper.IMapper mapper, ILearningSessionRepository repository)
+        public async Task<Result> Handle(RemoveActivityFromSessionCommand request, CancellationToken cancellationToken)
         {
-            _mapper = mapper;
-            _repository = repository;
-        }
+            var session = await repository.GetByIdAsync(request.SessionId);
 
-        public async Task<LearningSessionDto> Handle(RemoveActivityFromSessionCommand request, CancellationToken cancellationToken)
-        {
-            var session = await _repository.GetByIdAsync(request.SessionId) ?? throw new KeyNotFoundException("LearningSession not found");
+            if (session is null)
+                return Result.Failure<Guid>(LSessionErrors.NotFound(request.SessionId));
 
             session.RemoveActivity(request.ActivityId);
 
-            await _repository.UpdateAsync(session);
+            await unitOfWork.SaveChangesAsync();
 
-            return _mapper.Map<LearningSessionDto>(session);
+            return Result.Success(session.Id);
         }
     }
 }
-

@@ -2,30 +2,29 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using LearningSession.Application.DTOs;
-using LearningSession.Domain.Entities;
+using LearningSession.Domain.LSessions;
 using LearningSession.Application.Repositories;
+using Common.Application.Messaging;
+using Common.Domain;
+using LearningSession.Application.Abstractions.Data;
+using System.Data.Common;
 
 namespace LearningSession.Application.Commands.AddActivityToSession
 {
-    public class AddActivityToSessionCommandHandler : IRequestHandler<AddActivityToSessionCommand, LearningSessionDto>
+    sealed class AddActivityToSessionCommandHandler(
+        AutoMapper.IMapper mapper,
+        ILearningSessionRepository repository,
+        IUnitOfWork unitOfWork) : ICommandHandler<AddActivityToSessionCommand>
     {
-        private readonly AutoMapper.IMapper _mapper;
-        private readonly ILearningSessionRepository _repository;
-
-        public AddActivityToSessionCommandHandler(AutoMapper.IMapper mapper, ILearningSessionRepository repository)
+        public async Task<Result> Handle(AddActivityToSessionCommand request, CancellationToken cancellationToken)
         {
-            _mapper = mapper;
-            _repository = repository;
-        }
 
-        public async Task<LearningSessionDto> Handle(AddActivityToSessionCommand request, CancellationToken cancellationToken)
-        {
-            var session = await _repository.GetByIdAsync(request.SessionId) ?? throw new KeyNotFoundException("LearningSession not found");
+            LSession session = await repository.GetByIdAsync(request.SessionId) ?? throw new KeyNotFoundException("LearningSession not found");
             session.AddActivity(request.ActivityId);
 
-            await _repository.UpdateAsync(session);
+            await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return _mapper.Map<LearningSessionDto>(session);
+            return Result.Success();
         }
     }
 }

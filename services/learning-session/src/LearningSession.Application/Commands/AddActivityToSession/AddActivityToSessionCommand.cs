@@ -1,9 +1,7 @@
-using System;
-using MediatR;
-using LearningSession.Application.DTOs;
+using ICommand = Common.Application.Messaging.ICommand;
 
 namespace LearningSession.Application.Commands.AddActivityToSession
 {
-    public record AddActivityToSessionCommand(Guid SessionId, Guid ActivityId) : IRequest<LearningSessionDto>;
+    public record AddActivityToSessionCommand(Guid SessionId, Guid ActivityId) : ICommand;
 }
 

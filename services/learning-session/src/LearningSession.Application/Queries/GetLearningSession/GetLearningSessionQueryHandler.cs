@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using LearningSession.Application.DTOs;
 using LearningSession.Application.Repositories;
-using LearningSession.Domain.Entities;
+using LearningSession.Domain.LSessions;
 
 namespace LearningSession.Application.Queries.GetLearningSession
 {

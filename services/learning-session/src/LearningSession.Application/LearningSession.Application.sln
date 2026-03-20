@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113 d17.12
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearningSession.Application", "LearningSession.Application.csproj", "{C5991729-6BB0-4DA8-83D0-D6A0C1C51A70}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LearningSession.Domain", "LearningSession.Domain", "{E52749BF-51B1-411C-94EB-4DFFA150463A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearningSession.Domain", "..\LearningSession.Domain\LearningSession.Domain.csproj", "{62035F45-09C3-42C5-8117-88553DD6833A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +19,15 @@ Global
 		{C5991729-6BB0-4DA8-83D0-D6A0C1C51A70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5991729-6BB0-4DA8-83D0-D6A0C1C51A70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5991729-6BB0-4DA8-83D0-D6A0C1C51A70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62035F45-09C3-42C5-8117-88553DD6833A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62035F45-09C3-42C5-8117-88553DD6833A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62035F45-09C3-42C5-8117-88553DD6833A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62035F45-09C3-42C5-8117-88553DD6833A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{62035F45-09C3-42C5-8117-88553DD6833A} = {E52749BF-51B1-411C-94EB-4DFFA150463A}
 	EndGlobalSection
 EndGlobal

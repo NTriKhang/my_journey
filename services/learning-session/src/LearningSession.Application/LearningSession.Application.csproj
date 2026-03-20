@@ -19,4 +19,13 @@
     <ProjectReference Include="..\LearningSession.Domain\LearningSession.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Common.Application">
+      <HintPath>..\..\..\shared\src\Common.Application\bin\Debug\net9.0\Common.Application.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Domain">
+      <HintPath>..\LearningSession.Domain\bin\Debug\net9.0\Common.Domain.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

@@ -1,7 +1,8 @@
 using Common.Domain;
+using LearningSession.Domain.LSessions;
 using LearningSession.Domain.ValueObjects;
 
-namespace LearningSession.Domain.Entities
+namespace LearningSession.Domain.LSessions
 {
     /// <summary>
     /// Represents an intentional period of learning.
@@ -11,7 +12,7 @@ namespace LearningSession.Domain.Entities
     /// - Can be Ended only once
     /// - Contains zero or more LearningActivities (stored as ids)
     /// </summary>
-    public class LearningSession : Entity
+    public class LSession : Entity
     {
         public Guid Id { get; private set; }
         public DateTimeOffset StartedAt { get; private set; }
@@ -22,24 +23,24 @@ namespace LearningSession.Domain.Entities
         public IReadOnlyList<Guid> LearningActivityIds => _learningActivityIds.AsReadOnly();
 
         // For ORM / serializer
-        private LearningSession() { }
+        private LSession() { }
 
         /// <summary>
         /// Factory to create a new LearningSession. Ensures StartedAt is provided and session starts Active.
         /// </summary>
-        public static LearningSession StartNew(Guid? id, DateTimeOffset startedAt, IEnumerable<Guid>? activityIds = null)
+        public static LSession StartNew(DateTimeOffset startedAt, IEnumerable<Guid>? activityIds = null)
         {
-            if (startedAt == default) throw new ArgumentException("StartedAt must be provided", nameof(startedAt));
-
-            var session = new LearningSession
+            var session = new LSession
             {
-                Id = id == null || id == Guid.Empty ? Guid.NewGuid() : id.Value,
+                Id = Guid.NewGuid(),
                 StartedAt = startedAt,
                 Status = SessionStatus.Active
             };
 
             if (activityIds != null)
+            {
                 session._learningActivityIds.AddRange(activityIds);
+            }
 
             return session;
         }
@@ -47,22 +48,50 @@ namespace LearningSession.Domain.Entities
         /// <summary>
         /// Ends the session. Can only be called once.
         /// </summary>
-        public void End(DateTimeOffset endedAt)
+        public Result End(DateTimeOffset endedAt)
         {
-            if (EndedAt != null) throw new InvalidOperationException("Session has already been ended.");
-            if (endedAt < StartedAt) throw new ArgumentException("EndedAt cannot be before StartedAt", nameof(endedAt));
+            if (EndedAt != null)
+                return Result.Failure(LSessionErrors.AlreadyEnded);
+
+            if (endedAt < StartedAt)
+                return Result.Failure(LSessionErrors.InvalidEndTime);
 
             EndedAt = endedAt;
             Status = SessionStatus.Completed;
+
+            Raise(new LSessionEndedDomainEvent(Id, endedAt));
+
+            return Result.Success();
         }
 
-        public void AddActivity(Guid activityId)
+        /**
+        * Adds an activity to the session if it is valid and not already present.
+        *
+        * @param activityId
+        * @return result indicating success or failure
+        */
+        public Result AddActivity(Guid activityId)
         {
-            if (activityId == Guid.Empty) throw new ArgumentException(nameof(activityId));
+            if (activityId == Guid.Empty)
+                return Result.Failure(LSessionErrors.InvalidActivityId);
+
             if (!_learningActivityIds.Contains(activityId))
                 _learningActivityIds.Add(activityId);
+
+            return Result.Success();
         }
 
-        public bool RemoveActivity(Guid activityId) => _learningActivityIds.Remove(activityId);
+        /**
+        * Removes an activity from the session if it exists.
+        *
+        * @param activityId
+        * @return result indicating success
+        */
+        public Result RemoveActivity(Guid activityId)
+        {
+            _learningActivityIds.Remove(activityId);
+
+            return Result.Success();
+        }
     }
 }

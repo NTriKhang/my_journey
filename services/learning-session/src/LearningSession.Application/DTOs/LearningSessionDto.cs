@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using LearningSession.Domain.Entities;
 using LearningSession.Domain.ValueObjects;
 
 namespace LearningSession.Application.DTOs

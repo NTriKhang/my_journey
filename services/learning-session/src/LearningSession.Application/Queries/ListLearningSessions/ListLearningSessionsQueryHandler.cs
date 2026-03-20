@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using LearningSession.Application.DTOs;
-using LearningSession.Domain.Entities;
+using LearningSession.Domain.LSessions;
 using LearningSession.Application.Repositories;
 
 namespace LearningSession.Application.Queries.ListLearningSessions

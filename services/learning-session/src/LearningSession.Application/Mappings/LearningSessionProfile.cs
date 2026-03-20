@@ -1,6 +1,6 @@
 using AutoMapper;
 using LearningSession.Application.DTOs;
-using LearningSession.Domain.Entities;
+using LearningSession.Domain.LSessions;
 
 namespace LearningSession.Application.Mappings
 {
@@ -8,7 +8,7 @@ namespace LearningSession.Application.Mappings
     {
         public LearningSessionProfile()
         {
-            CreateMap<LearningSession, LearningSessionDto>()
+            CreateMap<LSession, LearningSessionDto>()
                 .ForMember(dest => dest.LearningActivityIds, opt => opt.MapFrom(src => src.LearningActivityIds));
         }
     }

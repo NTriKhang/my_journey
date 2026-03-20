@@ -3,30 +3,28 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using LearningSession.Application.DTOs;
-using LearningSession.Domain.Entities;
 using LearningSession.Application.Repositories;
+using LearningSession.Domain.LSessions;
+using Common.Application.Messaging;
+using Common.Domain;
+using LearningSession.Application.Abstractions.Data;
 
 namespace LearningSession.Application.Commands.StartLearningSession
 {
-    public class StartLearningSessionCommandHandler : IRequestHandler<StartLearningSessionCommand, LearningSessionDto>
+    public class StartLearningSessionCommandHandler(
+        AutoMapper.IMapper mapper,
+        ILearningSessionRepository repository,
+        IUnitOfWork unitOfWork) : ICommandHandler<StartLearningSessionCommand, Guid>
     {
-        private readonly AutoMapper.IMapper _mapper;
-        private readonly ILearningSessionRepository _repository;
 
-        public StartLearningSessionCommandHandler(AutoMapper.IMapper mapper, ILearningSessionRepository repository)
+        public async Task<Result<Guid>> Handle(StartLearningSessionCommand request, CancellationToken cancellationToken)
         {
-            _mapper = mapper;
-            _repository = repository;
-        }
+            LSession lSession = LSession.StartNew(request.StartedAt, request.ActivityIds);
 
-        public async Task<LearningSessionDto> Handle(StartLearningSessionCommand request, CancellationToken cancellationToken)
-        {
-            var session = LearningSession.StartNew(request.Id, request.StartedAt, request.ActivityIds);
+            await repository.AddAsync(lSession);
+            await unitOfWork.SaveChangesAsync();
 
-            // persist session via repository
-            await _repository.AddAsync(session);
-
-            return _mapper.Map<LearningSessionDto>(session);
+            return Result.Success(lSession.Id);
         }
     }
 }

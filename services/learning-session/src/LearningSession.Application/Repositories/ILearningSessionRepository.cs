@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using LearningSession.Domain.Entities;
+using LearningSession.Domain.LSessions;
 
 namespace LearningSession.Application.Repositories
 {
@@ -11,11 +11,11 @@ namespace LearningSession.Application.Repositories
     /// </summary>
     public interface ILearningSessionRepository
     {
-        Task<LearningSession?> GetByIdAsync(Guid id);
-        Task AddAsync(LearningSession session);
-        Task UpdateAsync(LearningSession session);
+        Task<LSession?> GetByIdAsync(Guid id);
+        Task AddAsync(LSession session);
+        Task UpdateAsync(LSession session);
         Task DeleteAsync(Guid id);
-        Task<IEnumerable<LearningSession>> ListAsync();
+        Task<IEnumerable<LSession>> ListAsync();
     }
 }
 
